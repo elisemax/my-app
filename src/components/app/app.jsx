@@ -14,6 +14,9 @@ function App() {
             </div>
             <EmploeysList/>
             <EmploeysAddForm/>
+            <AppInfo/>
+            <EmploeysAddForm/>
+
         </div>
     );
 }
