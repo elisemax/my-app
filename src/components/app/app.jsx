@@ -9,9 +9,9 @@ class App extends Component {
     constructor(props){
         super(props);
         this.state = {
-             data: [{name:"John C.",salary:800,increase:true,id:1},
-                    {name:"Fred X.",salary:2000,increase:false,id:2},
-                    {name:"Jack K.",salary:5000,increase:false,id:3}]
+             data: [{name:"John C.",salary:800,increase:true,rise:true,id:1},
+                    {name:"Fred X.",salary:2000,increase:false,rise:false,id:2},
+                    {name:"Jack K.",salary:5000,increase:false,rise:false,id:3}]
         }
         this.maxId = 4;
     }
@@ -26,20 +26,28 @@ class App extends Component {
         this.maxId++;
         this.setState(({data})=>{
             return {
-                data: data.concat([{name:name,salary:salary, increase:false, id:this.maxId}])
+                data: data.concat([{name:name,salary:salary, increase:false,rise:false,id:this.maxId}])
             }
         })
     }
-    onToggleIncrease = (id) =>{
-        console.log(`Increase this: ${id}`);
+    onToggleProp = (id,prop) =>{
+        this.setState(({data})=>({
+            data: data.map(item => {
+             if(item.id === id){
+                 return{...item, [prop]: !item[prop]}
+             }
+             return item;
+            }) 
+         }))
     }
-    onToggleRise = (id) =>{
-        console.log(`Rise this: ${id}`);
-    }
+
+
     render(){
+        const emploeys = this.state.data.length;
+        const increased = this.state.data.filter(item => item.increase).length;
         return (
             <div className="app">
-                <AppInfo/>
+                <AppInfo emploeys={emploeys} increased={increased} />
                 <div className="search-panel">
                     <SearchPanel/> 
                     <AppFilter/>
@@ -47,8 +55,7 @@ class App extends Component {
                 <EmploeysList 
                 data={this.state.data}
                 onDelete={this.deleteItem}
-                onToggleIncrease={this.onToggleIncrease}
-                onToggleRise={this.onToggleRise}/>
+                onToggleProp={this.onToggleProp}/>
                 <EmploeysAddForm addNewEmploeys={this.addNewEmploeys}/>
             </div>
         );
